@@ -1,0 +1,19 @@
+services:
+  back_end:
+    build: ./back-end
+    container_name: back-end
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./back-end/.env
+
+  front-end:
+    build: ./front-end/clinic-app
+    container_name: front-end
+    ports:
+      - "3001:3001"
+    env_file:
+      - front-end/clinic-app/.env
+    volumes:
+      - ./front-end/clinic-app:/app
+      - /app/node_modules
