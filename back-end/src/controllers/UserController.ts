@@ -10,7 +10,7 @@ export default class UserController {
         const user = await this.service.getUser(id)
 
         res.json(user)
-    } 
+    }
 
     addUser = async (req: Request, res: Response) => {
         const user: IUser = req.body
