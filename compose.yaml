@@ -6,14 +6,17 @@ services:
       - "3000:3000"
     env_file:
       - ./back-end/.env
+    volumes:
+      - ./back-end:/app
+      - /app/node_modules
 
   front-end:
-    build: ./front-end/clinic-app
+    build: ./front-end/src
     container_name: front-end
     ports:
       - "3001:3001"
     env_file:
-      - front-end/clinic-app/.env
+      - ./front-end/src/.env
     volumes:
-      - ./front-end/clinic-app:/app
+      - ./front-end/src:/app
       - /app/node_modules
