@@ -7,7 +7,7 @@ export default class UserService implements IUserService {
   constructor(private readonly repo: IUserRepository){}
 
   async addUser(user: IUser): Promise<UserDto> {
-    const exists = await this.repo.getUser(user.id)
+    const exists = await this.repo.getUserByEmail(user.email)
 
     if(exists) {
       throw new Error("User already exists")
@@ -27,7 +27,7 @@ export default class UserService implements IUserService {
 
     return new UserDto(user)
   }
-
+  
   async updateUser(id: number, user: IUser): Promise<UserDto> {
     const oldUser= await this.repo.getUser(id)
 
@@ -35,7 +35,7 @@ export default class UserService implements IUserService {
       throw new Error("User not found")
     }
 
-    const newUser = await this.repo.updateUser(id, user)
+    const newUser = await this.repo.updateUser(oldUser.id, user)
 
     return new UserDto(newUser)
   }
@@ -47,6 +47,6 @@ export default class UserService implements IUserService {
       throw new Error("User not found")
     }
 
-    await this.repo.deleteUser(id)
+    await this.repo.deleteUser(user.id)
   }
 }
