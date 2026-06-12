@@ -2,6 +2,7 @@ import UserDto from "../dto/UserDto";
 import { IUser } from "../models/UserModel"
 import IUserService from "./IUserService"
 import IUserRepository from "../repository/IUserRepository"
+import bcrypt from "bcrypt"
 
 export default class UserService implements IUserService {
   constructor(private readonly repo: IUserRepository){}
@@ -12,6 +13,9 @@ export default class UserService implements IUserService {
     if(exists) {
       throw new Error("User already exists")
     }
+
+    const hashPwd = await bcrypt.hash(user.password, 10)
+    user.password = hashPwd
 
     const newUser = await this.repo.createUser(user)
 
