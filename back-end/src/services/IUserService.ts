@@ -1,9 +1,10 @@
-import { IUser } from "../models/UserModel"
-import UserDto from "../dto/UserDto"
+import UserDto from "../dto/user/UserDto"
+import UserCreateDto from "../dto/user/UserCreateDto";
+import UserPatchDto from "../dto/user/UserPatchDto";
 
 export default interface IUserService {
-    addUser: (user: IUser) => Promise<UserDto>
+    addUser: (user: UserCreateDto) => Promise<UserDto>
     getUser: (id: number) => Promise<UserDto>
-    updateUser: (id: number, user: IUser) => Promise<UserDto>
+    patchUser: (id: number, user: UserPatchDto) => Promise<UserDto>
     deleteUser: (id: number) => Promise<void>
 }

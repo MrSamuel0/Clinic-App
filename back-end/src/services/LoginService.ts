@@ -1,29 +1,27 @@
 import ILoginService from "./ILoginService"
-import IUserRepository from "../repository/UserRepository"
+import IUserRepository from "../repository/IUserRepository"
+import { UnauthorizedException } from "../exceptions"
+import { envConfig } from "../config/index"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import "dotenv/config"
 
 export default class LoginService implements ILoginService {
     constructor(private readonly repo: IUserRepository){}
 
     async login(email: string, password: string): Promise<string> {
         const user = await this.repo.getUserByEmail(email)
-
-        if(!user) {
-            throw new Error("Invalid credentials")
+        if (!user) {
+            throw new UnauthorizedException("Invalid credentials")
         }
-
-        const isPassword: boolean = await bcrypt.compare(password, user.password)
-
-        if(!isPassword) {
-            throw new Error("Invalid credentials")
+        
+        const isPassword = await bcrypt.compare(password, user.password)
+        if (!isPassword) { 
+            throw new UnauthorizedException("Invalid credentials")
         }
-
-        const token = jwt.sign({id: user.id, name: user.name, age: user.age, email: email}, process.env.JWT_SECRET!, {
+        
+        return jwt.sign({role: user.role}, envConfig.ACCESS_SECRET, {
+            subject: user!.id.toString(),
             expiresIn: "1d"
         })
-
-        return token
     }
 }

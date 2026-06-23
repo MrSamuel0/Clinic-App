@@ -9,6 +9,6 @@ export default class LoginController {
 
         const token = await this.service.login(email, password)
 
-        res.json({token: token})
+        res.status(200).json(token)
     }
 }   

@@ -10,6 +10,12 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  }
+
+enum Role {
+  PATIENT
+  DOCTOR
+  ADMIN
 }
 
 model User {
@@ -18,4 +24,34 @@ model User {
   email String @unique
   age Int
   password String
+  role Role @default(PATIENT)
+  doctor Doctor?
+  patient Patient?
+}
+
+model Doctor {
+  id Int @id @default(autoincrement())
+  crm String @unique
+  speciality String
+  User User @relation(fields: [user_id], references: [id])
+  user_id Int @unique
+  appointments Appointment[]
+}
+
+model Patient {
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [user_id], references: [id])
+  user_id Int @unique
+  appointments Appointment[]
+}
+
+model Appointment {
+  id Int @id @default(autoincrement())
+  notes String?
+  diagnosis String?
+  prescription String?
+  patient_id Int
+  patient Patient @relation(fields: [patient_id], references: [id])
+  doctor_id Int
+  doctor Doctor @relation(fields: [doctor_id], references: [id])
 }

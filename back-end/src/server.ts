@@ -5,12 +5,13 @@ import LoginService from "./services/LoginService"
 import UserController from "./controllers/UserController"
 import LoginController from "./controllers/LoginController"
 import UserRoutes from "./routes/UserRoutes"
+import LoginRoutes from "./routes/LoginRoutes"
+import { ErrorMiddleware } from "./middlewares/ErrorMiddleware"
 import express from "express"
 import cors from "cors"
-import "dotenv/config"
-import LoginRoutes from "./routes/LoginRoutes";
+import { envConfig } from "./config";
 
-const port = process.env.PORT
+const port = envConfig.PORT
 const userRepo = new UserRepository(prisma)
 
 const userService = new UserService(userRepo)
@@ -24,6 +25,7 @@ app.use(cors())
 app.use(express.json())
 app.use(UserRoutes(userController))
 app.use(LoginRoutes(loginController))
+app.use(ErrorMiddleware)
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)
