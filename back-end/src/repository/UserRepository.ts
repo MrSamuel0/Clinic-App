@@ -1,11 +1,13 @@
 import IUserRepository from "./IUserRepository"
-import { IUser } from "../models/UserModel";
-import { PrismaClient } from "../generated/prisma/client";
+import { IUser } from "../models/UserModel"
+import { PrismaClient } from "../generated/prisma/client"
+import UserPatchDto from "../dto/user/UserPatchDto"
+import UserCreateDto from "../dto/user/UserCreateDto"
 
 export default class UserRepository implements IUserRepository {
     constructor(private readonly db: PrismaClient) {}
 
-    async createUser(user: IUser): Promise<IUser> {
+    async createUser(user: UserCreateDto): Promise<IUser> {
         return await this.db.user.create({ data: user })
     }
 
@@ -17,7 +19,7 @@ export default class UserRepository implements IUserRepository {
         return await this.db.user.findUnique({ where: { email } })
     }
 
-    async updateUser(id: number, user: IUser): Promise<IUser> {
+    async patchUser(id: number, user: UserPatchDto): Promise<IUser> {
         return await this.db.user.update({ where: { id }, data: user })
     }
 

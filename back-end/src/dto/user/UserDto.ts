@@ -1,18 +1,19 @@
-import { IUser } from "../models/UserModel"
+import { Role } from "../../generated/prisma/client"
+import { IUser } from "../../models/UserModel"
 
 export default class UserDto {
     id: number
     name: string
     email: string
     age: number
-    password: string
+    role: Role
 
     constructor(user: IUser) {
         this.id = user.id
         this.name = user.name
         this.email = user.email
         this.age = user.age
-	    this.password = user.password
+        this.role = user.role
     }
 }
 
